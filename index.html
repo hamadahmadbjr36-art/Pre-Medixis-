@@ -1,0 +1,1396 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cell & Enzyme Biology Quiz</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 5px;
+            font-size: 10px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 480px;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 6px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        .header {
+            padding: 6px 8px;
+            background: linear-gradient(to right, #4776E6, #8E54E9);
+            color: white;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h2 {
+            font-size: 10px;
+            font-weight: bold;
+        }
+        
+        .timer {
+            font-size: 9px;
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 6px;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .timer i {
+            margin-right: 3px;
+            font-size: 8px;
+        }
+        
+        .content {
+            padding: 8px;
+        }
+        
+        .password-section {
+            text-align: center;
+            padding: 10px;
+        }
+        
+        .password-input {
+            width: 100%;
+            padding: 5px;
+            margin: 6px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 9px;
+            text-align: center;
+            transition: border-color 0.3s;
+        }
+        
+        .password-input:focus {
+            border-color: #4776E6;
+            outline: none;
+        }
+        
+        .btn {
+            padding: 4px 6px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            margin: 0 2px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(to right, #4776E6, #8E54E9);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+        
+        .quiz-section {
+            display: none;
+        }
+        
+        .question {
+            font-size: 9px;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+            line-height: 1.2;
+            padding: 5px 0;
+        }
+        
+        .options-vertical {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: 10px;
+        }
+        
+        .option-row {
+            display: flex;
+            align-items: center;
+            padding: 4px;
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-height: 20px;
+        }
+        
+        .option-row:hover {
+            background: #e9e9e9;
+            border-color: #bbb;
+        }
+        
+        .option-row.selected {
+            background: #d1e7ff;
+            border-color: #4776E6;
+            color: #4776E6;
+            font-weight: bold;
+        }
+        
+        .option-label {
+            font-weight: bold;
+            margin-right: 6px;
+            min-width: 20px;
+            text-align: center;
+        }
+        
+        .option-text {
+            font-size: 8px;
+            line-height: 1.1;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            gap: 4px;
+        }
+        
+        .btn-nav {
+            padding: 4px 6px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+        }
+        
+        .btn-nav i {
+            margin-right: 3px;
+            font-size: 7px;
+        }
+        
+        .btn-back {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-skip {
+            background: #ffc107;
+            color: #333;
+        }
+        
+        .btn-next {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-submit {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .progress-container {
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .progress-text {
+            font-size: 8px;
+            color: #666;
+            white-space: nowrap;
+        }
+        
+        .progress {
+            flex-grow: 1;
+            background: #e9ecef;
+            height: 4px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, #4776E6, #8E54E9);
+            border-radius: 2px;
+            transition: width 0.3s;
+        }
+        
+        .question-counter {
+            font-size: 8px;
+            color: #666;
+            text-align: right;
+            margin-top: 3px;
+        }
+        
+        .result-section {
+            display: none;
+            padding: 10px;
+        }
+        
+        .result-header {
+            text-align: center;
+            margin-bottom: 10px;
+            color: #4776E6;
+            font-size: 10px;
+        }
+        
+        .result-summary {
+            background: #f8f9fa;
+            padding: 8px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-size: 9px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px;
+        }
+        
+        .result-summary p {
+            margin: 2px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .result-details {
+            margin-top: 10px;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+        
+        .result-item {
+            background: #f8f9fa;
+            padding: 6px;
+            border-radius: 3px;
+            margin-bottom: 6px;
+            font-size: 8px;
+        }
+        
+        .result-question {
+            font-weight: bold;
+            margin-bottom: 3px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .result-answer {
+            margin: 2px 0;
+            padding-left: 6px;
+        }
+        
+        .correct {
+            color: #28a745;
+        }
+        
+        .incorrect {
+            color: #dc3545;
+        }
+        
+        .reasoning {
+            margin-top: 4px;
+            padding: 4px;
+            background: #e9ecef;
+            border-radius: 2px;
+            font-size: 7px;
+            line-height: 1.2;
+        }
+        
+        .btn-retake {
+            display: block;
+            width: 100%;
+            padding: 5px;
+            margin-top: 10px;
+            background: linear-gradient(to right, #4776E6, #8E54E9);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 9px;
+        }
+        
+        .btn-retake:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+        
+        .time-progress {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 8px;
+        }
+        
+        .time-progress-bar {
+            flex-grow: 1;
+            height: 3px;
+            background: #e9ecef;
+            border-radius: 1.5px;
+            overflow: hidden;
+        }
+        
+        .time-progress-fill {
+            height: 100%;
+            background: #ffc107;
+            border-radius: 1.5px;
+            transition: width 1s linear;
+        }
+        
+        .quiz-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 6px;
+            font-size: 8px;
+            color: #666;
+        }
+
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: #fff;
+            padding: 10px 15px;
+            border: 1px solid #888;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 300px;
+            text-align: center;
+        }
+        
+        .modal-content h3 {
+            margin-bottom: 5px;
+            font-size: 1.1em;
+            color: #333;
+        }
+        
+        .modal-content p {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .modal-button {
+            background: linear-gradient(to right, #4776E6, #8E54E9);
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Medixis Quiz</h2>
+            <div class="timer" id="total-timer" style="display: none;"><i class="fas fa-clock"></i> <span id="total-time">20:00</span></div>
+            <div class="timer" id="question-timer" style="display: none;"><i class="fas fa-hourglass-half"></i> <span id="question-time">01:00</span></div>
+        </div>
+        
+        <div class="content">
+            <!-- Password Section -->
+            <div class="password-section" id="password-section">
+                <p style="font-size: 9px;">Enter password to start the quiz</p>
+                <input type="password" class="password-input" id="password-input" placeholder="Enter password">
+                <button class="btn btn-primary" id="start-btn">Start Quiz</button>
+            </div>
+            
+            <!-- Quiz Section -->
+            <div class="quiz-section" id="quiz-section">
+                <div class="question" id="question">Question will appear here</div>
+                
+                <div class="options-vertical" id="options">
+                    <!-- Options will be generated here -->
+                </div>
+                
+                <div class="navigation">
+                    <button class="btn-nav btn-back" id="back-btn"><i class="fas fa-arrow-left"></i> Back</button>
+                    <button class="btn-nav btn-skip" id="skip-btn"><i class="fas fa-forward"></i> Skip</button>
+                    <button class="btn-nav btn-next" id="next-btn">Next <i class="fas fa-arrow-right"></i></button>
+                    <button class="btn-nav btn-submit" id="submit-btn"><i class="fas fa-paper-plane"></i> Submit</button>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-text">Progress:</div>
+                    <div class="progress">
+                        <div class="progress-bar" id="progress-bar"></div>
+                    </div>
+                    <div id="progress-percent">0%</div>
+                </div>
+                
+                <div class="time-progress">
+                    <div class="progress-text">Question Time:</div>
+                    <div class="time-progress-bar">
+                        <div class="time-progress-fill" id="time-progress-fill"></div>
+                    </div>
+                </div>
+                
+                <div class="quiz-info">
+                    <div>Question: <span id="current-question">1</span>/<span id="total-questions">100</span></div>
+                    <div>Skipped: <span id="skipped-count">0</span></div>
+                </div>
+            </div>
+            
+            <!-- Result Section -->
+            <div class="result-section" id="result-section">
+                <h2 class="result-header"><i class="fas fa-trophy"></i> Quiz Results</h2>
+                
+                <div class="result-summary">
+                    <p><strong>Total MCQs:</strong> <span id="total-mcqs">0</span></p>
+                    <p><strong>Correct:</strong> <span id="correct-answers">0</span></p>
+                    <p><strong>Wrong:</strong> <span id="wrong-answers">0</span></p>
+                    <p><strong>Skipped:</strong> <span id="skipped-answers">0</span></p>
+                    <p><strong>Left:</strong> <span id="left-answers">0</span></p>
+                    <p><strong>Percentage:</strong> <span id="percentage">0%</span></p>
+                    <p><strong>Time Taken:</strong> <span id="time-taken">00:00</span></p>
+                </div>
+                
+                <h3 style="font-size: 9px; margin-bottom: 5px;">Detailed Results:</h3>
+                <div class="result-details" id="result-details">
+                    <!-- Result details will be generated here -->
+                </div>
+                
+                <button class="btn-retake" id="retake-btn"><i class="fas fa-redo"></i> Retake Quiz</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Modal for Alerts -->
+    <div id="message-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3 id="modal-title"></h3>
+            <p id="modal-message"></p>
+            <button class="modal-button" onclick="document.getElementById('message-modal').style.display='none';">OK</button>
+        </div>
+    </div>
+
+    <script>
+        // Quiz data
+        const quizData = [
+            // Cell Biology MCQs (1-50)
+            {
+                question: "1. The primary function of the Rough Endoplasmic Reticulum (RER) is:",
+                options: ["Lipid synthesis and detoxification", "Protein synthesis and mechanical support", "Calcium ion storage and impulse transmission", "Carbohydrate metabolism and drug detoxification"],
+                correct: 1,
+                reasoning: "The text states that RER has ribosomes attached and is 'mainly concerned with the events of protein synthesis (translation)' and its presence 'also provides a mechanical support to the cell.'"
+            },
+            {
+                question: "2. In muscle cells, the specialized form of smooth ER is known as:",
+                options: ["Golgi complex", "Sarcoplasmic reticulum", "Nuclear envelope", "Phragmoplast"],
+                correct: 1,
+                reasoning: "The text explicitly mentions that in skeletal muscle cells, the smooth ER is more abundant and is called the sarcoplasmic reticulum."
+            },
+            {
+                question: "3. Which of the following is NOT a function of the Smooth Endoplasmic Reticulum (SER)?",
+                options: ["Synthesis of steroid hormones", "Detoxification of drugs in the liver", "Storage and release of calcium ions", "Synthesis of ribosomal RNA (rRNA)"],
+                correct: 3,
+                reasoning: "SER functions include lipid synthesis (steroids), detoxification, and calcium storage. rRNA synthesis occurs in the nucleolus, not the SER."
+            },
+            {
+                question: "4. The cisternae of the Golgi complex are characterized by:",
+                options: ["Being studded with ribosomes on the cytoplasmic side", "A convex forming face and a concave maturing face", "Containing their own circular DNA for self-replication", "Direct continuity with the nuclear membrane pores"],
+                correct: 1,
+                reasoning: "The text describes the outer end of the Golgi as convex (forming/cis face) and the inner end as concave (maturing/trans face)."
+            },
+            {
+                question: "5. The structure formed by the fusion of Golgi vesicles at the cell equator during plant cell division is called:",
+                options: ["Nucleolus", "Phragmoplast", "Kinetochore", "Chromatin"],
+                correct: 1,
+                reasoning: "The text states that in plant cell division, Golgi vesicles fuse together on the cell equator to form a structure called the phragmoplast, from which the new cell wall is derived."
+            },
+            {
+                question: "6. The number of mitochondria in a cell correlates directly with the cell's:",
+                options: ["Size", "Level of metabolic activity", "Number of nuclei", "Age"],
+                correct: 1,
+                reasoning: "The text mentions that the number of mitochondria 'correlates with the cell's level of metabolic activity,' giving the example that contracting cells have more mitochondria."
+            },
+            {
+                question: "7. The elementary particles (F0-F1 particles) found on the cristae of mitochondria are primarily responsible for:",
+                options: ["DNA replication", "ATP synthesis", "Protein digestion", "Lipid storage"],
+                correct: 1,
+                reasoning: "The text identifies these granular structures on the inner membrane as 'F0-F1 particles' and states they are 'actually ATP synthesis enzymes.'"
+            },
+            {
+                question: "8. The mitochondrial matrix contains all of the following EXCEPT:",
+                options: ["Circular DNA", "80S ribosomes", "Various types of RNA", "Enzymes for metabolic cycles"],
+                correct: 1,
+                reasoning: "The text specifies that the mitochondrial matrix contains 'a small circular DNA, all kinds of RNA ribosomes (70S) and enzymes.' 80S ribosomes are found in the eukaryotic cytoplasm, not mitochondria."
+            },
+            {
+                question: "9. The nuclear envelope is structurally continuous with which other organelle?",
+                options: ["Mitochondrion", "Golgi apparatus", "Endoplasmic Reticulum", "Lysosome"],
+                correct: 2,
+                reasoning: "The text states that the 'outer membrane of nuclear envelope is covered with ribosomes and is connected with the membranes of ER.'"
+            },
+            {
+                question: "10. The movement of large molecules through the nuclear pore complex is:",
+                options: ["A simple, unregulated diffusion process", "Facilitated by nucleoporins and can be signal-dependent", "Only possible during cell division when the envelope breaks down", "Restricted solely to water and gases"],
+                correct: 1,
+                reasoning: "The text explains that while smaller molecules diffuse freely, larger molecules 'may be recognized by specific signal sequences and then be diffused with the help of nucleoporin.'"
+            },
+            {
+                question: "11. The primary function of the nucleolus is:",
+                options: ["To store the cell's DNA", "To control the entry and exit of nuclear materials", "The construction of ribosomes", "To provide structural support to the nucleus"],
+                correct: 2,
+                reasoning: "The text clearly states that the nucleolus 'is involved in the construction of ribosomes,' as it contains areas with ribosomal subunits and rRNA."
+            },
+            {
+                question: "12. During cell division, the condensed form of chromatin is known as:",
+                options: ["Nucleoplasm", "Chromosomes", "Cisternae", "Nucleoporins"],
+                correct: 1,
+                reasoning: "The text defines that chromatin fibers 'condense and coil up into separate structures called chromosomes' during cell division."
+            },
+            {
+                question: "13. The point of attachment for spindle fibers on a chromosome is the:",
+                options: ["Telomere", "Centromere", "Nucleolar organizer", "Chromatid"],
+                correct: 1,
+                reasoning: "The text identifies the centromere as the point where chromatids are attached and notes it is 'functionally related to the movement of chromosomes during cell division.'"
+            },
+            {
+                question: "14. The secondary constriction on a chromosome is also known as the:",
+                options: ["Kinetochore", "Centromere", "Nucleolar organizer", "Spindle pole"],
+                correct: 2,
+                reasoning: "The text states that some chromosomes have a secondary constriction which 'gives rise to nucleoli during interphase,' identifying it as the nucleolar organizer."
+            },
+            {
+                question: "15. A key distinguishing feature of a prokaryotic cell is:",
+                options: ["The presence of multiple linear chromosomes", "A membrane-bound nucleus housing its DNA", "Genetic material directly suspended in the cytoplasm", "The presence of extensive organelles like Golgi and ER"],
+                correct: 2,
+                reasoning: "The text defines prokaryotes by stating they lack a membrane-bound nucleus and that their 'DNA molecule is directly suspended in the cytoplasm.'"
+            },
+            {
+                question: "16. Which of the following organelles would you NOT expect to find in a prokaryotic cell?",
+                options: ["Ribosomes", "Cell wall", "Mitochondria", "Plasma membrane"],
+                correct: 2,
+                reasoning: "The text lists mitochondria, ER, chloroplasts, and Golgi complex as examples of membrane-bound structures absent in prokaryotes."
+            },
+            {
+                question: "17. The cell wall of bacteria is primarily composed of:",
+                options: ["Cellulose", "Chitin", "Peptidoglycan (Murein)", "Phospholipids"],
+                correct: 2,
+                reasoning: "The text describes the prokaryotic cell wall as 'composed of polysaccharides chain bound covalently to shorter chain of amino acids forming peptidoglycan or murein.'"
+            },
+            {
+                question: "18. In bacterial conjugation, genetic material is transferred through:",
+                options: ["Viruses that infect bacteria", "Picking up free DNA from the environment", "A direct cytoplasmic extension between two cells", "Fusion of gametes"],
+                correct: 2,
+                reasoning: "The text states that in conjugation, 'DNA passes through an extension on the surface of one bacterium and travels to another bacterium.'"
+            },
+            {
+                question: "19. The process where bacteria acquire DNA from their surrounding environment is called:",
+                options: ["Conjugation", "Transformation", "Transduction", "Binary fission"],
+                correct: 1,
+                reasoning: "The text defines transformation as the process where 'bacteria pick up pieces of DNA from their environment.'"
+            },
+            {
+                question: "20. Transduction involves the transfer of bacterial DNA via:",
+                options: ["A pilus", "A viral vector", "Direct absorption", "Mitotic spindle"],
+                correct: 1,
+                reasoning: "The text defines transduction as a process where 'viruses that infect bacteria carry DNA from one bacterium to another.'"
+            },
+            {
+                question: "21. The nuclear content is separated from the cytoplasm by a double membrane called the:",
+                options: ["Plasma membrane", "Nuclear envelope", "Endoplasmic reticulum", "Golgi apparatus"],
+                correct: 1,
+                reasoning: "The text introduces the nuclear envelope as the 'double membrane covering which makes the boundary of nucleus.'"
+            },
+            {
+                question: "22. The space between the two membranes of the nuclear envelope is known as the:",
+                options: ["Cristae", "Perinuclear space", "Intermembrane space", "Cisternal space"],
+                correct: 1,
+                reasoning: "The text states that the two membranes of the nuclear envelope are 'separated by a fluid-filled perinuclear space.'"
+            },
+            {
+                question: "23. The nucleoplasm can be described as a:",
+                options: ["Solid crystalline structure", "Network of chromatin fibers only", "Semifluid mixture containing enzymes and nucleotides", "Dense body composed solely of rRNA"],
+                correct: 2,
+                reasoning: "The text describes nucleoplasm as a 'transparent semifluid ground substance formed of a mixture of proteins, enzymes... free nucleotide and some metal ions.'"
+            },
+            {
+                question: "24. A cell with multiple nuclei is correctly termed:",
+                options: ["Uninucleate", "Binucleate", "Anucleate", "Multinucleate"],
+                correct: 3,
+                reasoning: "The text provides the terminology: 'cells having one nucleus are called mono-nucleate, those with two nuclei are bi-nucleate and with more than two nuclei are said to be multi-nucleate.'"
+            },
+            {
+                question: "25. The full complement of chromosomes found in somatic (body) cells is referred to as the:",
+                options: ["Haploid number (n)", "Diploid number (2n)", "Triploid number (3n)", "Polyploid number"],
+                correct: 1,
+                reasoning: "The text defines 'the full number of chromosomes in normal body cells is diploid (2n).'"
+            },
+            {
+                question: "26. The specific location of a gene on a chromosome is called its:",
+                options: ["Centromere", "Locus", "Kinetochore", "Chromatid"],
+                correct: 1,
+                reasoning: "The text states that genetic information is located on the chromosomes 'in the form of genes,' and this specific location is referred to as the 'locus.'"
+            },
+            {
+                question: "27. According to the document, which organism has a diploid chromosome number of 48?",
+                options: ["Human (Homo sapiens)", "Fruit Fly (Drosophila)", "Chimpanzee", "Garden Pea"],
+                correct: 2,
+                reasoning: "The 'For your information' table lists the Chimpanzee with 48 (24 pairs) chromosomes."
+            },
+            {
+                question: "28. The primary component of the plant cell wall, which distinguishes it from a bacterial cell wall, is:",
+                options: ["Peptidoglycan", "Cellulose", "Chitin", "Murein"],
+                correct: 1,
+                reasoning: "The text contrasts the two, stating 'The cell wall of plants (eukaryotes) is generally made of cellulose and is differently structured than that of a bacterium (prokaryotes).'"
+            },
+            {
+                question: "29. The bacterial DNA is typically:",
+                options: ["Linear and found within a nucleus", "Circular and found in a nucleoid region", "Segmented and scattered in the cytoplasm", "Associated with histone proteins"],
+                correct: 1,
+                reasoning: "The text describes the nuclear material in bacteria as 'a single, circular and double stranded DNA molecule' that occupies a 'nuclear area (Nucleoid).'"
+            },
+            {
+                question: "30. The small, circular, extra-chromosomal DNA molecules sometimes found in bacteria are called:",
+                options: ["Chromatin", "Plasmids", "Nucleoids", "Capsules"],
+                correct: 1,
+                reasoning: "The diagram of the bacterial cell (Fig: 1.18) labels a structure as 'Plasmid.'"
+            },
+            {
+                question: "31. The primary function of the Golgi apparatus is best described as:",
+                options: ["Synthesizing proteins for export", "Modifying, sorting, and packaging cell secretions", "Producing ATP through cellular respiration", "Digesting foreign materials and worn-out organelles"],
+                correct: 1,
+                reasoning: "The text states its 'most important function... is the processing of cell secretions' and it 'modifies them to perform specific function and then exports these modified products.'"
+            },
+            {
+                question: "32. Which of the following is synthesized by the SER?",
+                options: ["Ribosomal proteins", "DNA", "Steroid hormones", "Enzymes for the Krebs cycle"],
+                correct: 2,
+                reasoning: "The text lists 'synthesis of lipids including oils, phospholipids and steroid' as a function of the smooth ER."
+            },
+            {
+                question: "33. The organelle that is a major site for lipid synthesis and calcium storage is the:",
+                options: ["Rough Endoplasmic Reticulum", "Smooth Endoplasmic Reticulum", "Golgi Apparatus", "Mitochondrion"],
+                correct: 1,
+                reasoning: "The text explicitly assigns the functions of lipid synthesis and calcium ion storage to the smooth ER."
+            },
+            {
+                question: "34. The structure formed by the infolding of the inner mitochondrial membrane is called a:",
+                options: ["Crista", "Cisterna", "Matrix", "Granum"],
+                correct: 0,
+                reasoning: "The text names the infoldings of the inner membrane as 'cristae (sing: crista).'"
+            },
+            {
+                question: "35. The mitochondrial matrix contains enzymes for which of the following processes?",
+                options: ["Protein synthesis", "Krebs cycle and fatty acid metabolism", "Photolysis", "Detoxification of drugs"],
+                correct: 1,
+                reasoning: "The text states the matrix contains enzymes 'Vital for aerobic respiration (Krebs cycle, Fatty acid metabolism etc).'"
+            },
+            {
+                question: "36. The nuclear pores are composed of specialized proteins known as:",
+                options: ["Porins", "Histones", "Nucleoporins", "Kinetochores"],
+                correct: 2,
+                reasoning: "The text states the nuclear pores 'are composed of a specialized transport protein called nucleoporin.'"
+            },
+            {
+                question: "37. The term for the exchange of materials between the nucleus and the cytoplasm is:",
+                options: ["Cytoplasmic streaming", "Nucleo-cytoplasmic exchange", "Active transport", "Phagocytosis"],
+                correct: 1,
+                reasoning: "The text uses this exact term, stating the pores 'regulate the nucleo-cytoplasmic exchange of materials.'"
+            },
+            {
+                question: "38. The two identical strands of a duplicated chromosome are called:",
+                options: ["Centromeres", "Chromatin", "Chromatids", "Centrioles"],
+                correct: 2,
+                reasoning: "The text defines a chromosome as consisting 'of two strands called chromatids.'"
+            },
+            {
+                question: "39. The number of chromosomes in a human gamete (sperm or egg) is:",
+                options: ["46", "23", "92", "2n"],
+                correct: 1,
+                reasoning: "The text gives the example: 'human sperms and eggs have 23 each.'"
+            },
+            {
+                question: "40. Prokaryotic ribosomes are characterized as:",
+                options: ["80S ribosomes", "70S ribosomes", "60S ribosomes", "50S ribosomes"],
+                correct: 1,
+                reasoning: "The text states 'Prokaryotes have small sized ribosomes i.e. 70S.'"
+            },
+            {
+                question: "41. The process of cell division in prokaryotes is known as:",
+                options: ["Mitosis", "Meiosis", "Binary fission", "Cytokinesis"],
+                correct: 2,
+                reasoning: "The text clearly states that prokaryotic cells 'divide by binary fission.'"
+            },
+            {
+                question: "42. The primary function of the bacterial cell wall is to:",
+                options: ["Synthesize proteins", "Regulate nutrient entry", "Protect the cell from osmotic lysis", "Facilitate movement"],
+                correct: 2,
+                reasoning: "The text lists the functions of the bacterial cell wall, including that it 'protects the cells from osmotic lysis.'"
+            },
+            {
+                question: "43. The organelle responsible for forming the phragmoplast in dividing plant cells is the:",
+                options: ["Endoplasmic Reticulum", "Golgi Complex", "Mitochondrion", "Nucleus"],
+                correct: 1,
+                reasoning: "The text states that 'Golgi complex also gives rise vesicles which contain cell wall synthesizing materials' that fuse to form the phragmoplast."
+            },
+            {
+                question: "44. The F0-F1 particles in mitochondria are directly involved in:",
+                options: ["DNA replication", "Protein synthesis", "ATP synthesis", "Lipid breakdown"],
+                correct: 2,
+                reasoning: "As stated in reasoning for question 7, these are identified as 'ATP synthesis enzymes.'"
+            },
+            {
+                question: "45. A cell that is highly active in secreting proteins would be expected to have a well-developed:",
+                options: ["Smooth ER and Golgi apparatus", "Rough ER and Golgi apparatus", "Nucleolus and Smooth ER", "Mitochondria and chloroplasts"],
+                correct: 1,
+                reasoning: "The RER is for protein synthesis and the Golgi is for processing and exporting secretions. The text links them: 'proteins from rough ER are also transported to the Golgi complex through smooth ER.'"
+            },
+            {
+                question: "46. The presence of its own DNA, RNA, and ribosomes allows the mitochondrion to:",
+                options: ["Function independently of the cell's nucleus", "Replicate itself and synthesize some of its own proteins", "Control the cell's metabolic activities", "Digest unwanted cellular materials"],
+                correct: 1,
+                reasoning: "The text states the presence of these components means mitochondria 'have their own genetic system' and are 'self-replicating,' implying they can make some of their own proteins."
+            },
+            {
+                question: "47. The nucleolus is most active during which phase of the cell cycle?",
+                options: ["Prophase", "Metaphase", "Anaphase", "Interphase"],
+                correct: 3,
+                reasoning: "The text states 'Nucleolus appears during interphase and disappears during cell division.'"
+            },
+            {
+                question: "48. The kinetochore is a protein complex associated with the:",
+                options: ["Telomere", "Centromere", "Nucleolar organizer", "Nuclear pore"],
+                correct: 1,
+                reasoning: "The text states 'Each centromere has a complex of kinetochores protein present on the opposite sides of the constriction.'"
+            },
+            {
+                question: "49. The fundamental, thread-like genetic material in a non-dividing nucleus is:",
+                options: ["Chromosome", "Chromatin", "Chromatid", "Centromere"],
+                correct: 1,
+                reasoning: "The text defines chromatin as the 'network of thin thread like structures' that condenses into chromosomes during division."
+            },
+            {
+                question: "50. A key difference between prokaryotic and eukaryotic flagella is their:",
+                options: ["Presence", "Function", "Structure and composition", "Direction of rotation"],
+                correct: 2,
+                reasoning: "The text explicitly states that 'the prokaryotic and eukaryotic flagella have different structure and composition.'"
+            },
+            // Enzyme Biology MCQs (51-80)
+            {
+                question: "51. Enzymes function as biological:",
+                options: ["Substrates", "Catalysts", "Products", "Inhibitors"],
+                correct: 1,
+                reasoning: "The text defines enzymes as 'biological catalysts' that speed up reactions without being consumed."
+            },
+            {
+                question: "52. Which of the following is a common property of ALL enzymes?",
+                options: ["They are consumed in the reactions they catalyze.", "They are highly specific to their substrate.", "They lower the activation energy of a reaction.", "They are composed of RNA."],
+                correct: 2,
+                reasoning: "The text lists 'Lower the need of activation energy' as a universal property of enzymes."
+            },
+            {
+                question: "53. The specific region of an enzyme where the substrate binds is called the:",
+                options: ["Allosteric site", "Active site", "Binding site", "Cofactor"],
+                correct: 1,
+                reasoning: "The text states 'the catalytic activity of an enzyme is located in its active site.'"
+            },
+            {
+                question: "54. The 'Lock and Key' model of enzyme action was proposed by:",
+                options: ["Koshland", "Fischer", "Pasteur", "Payan and Persoz"],
+                correct: 1,
+                reasoning: "The text attributes the Lock and Key model to 'Emil Fischer proposed Lock and key model (in 1894).'"
+            },
+            {
+                question: "55. According to the 'Induced Fit' model, the active site is:",
+                options: ["Rigid and unchanging", "Complementary to the product", "Flexible and modified upon substrate binding", "Only found in regulatory enzymes"],
+                correct: 2,
+                reasoning: "The text states that in the Induced Fit model, the 'active site is flexible; therefore, it is modified as the substrate interacts with enzyme.'"
+            },
+            {
+                question: "56. A cofactor that is permanently and covalently bound to an enzyme is called a:",
+                options: ["Coenzyme", "Prosthetic group", "Activator", "Vitamin"],
+                correct: 1,
+                reasoning: "The text defines a prosthetic group as 'a cofactor that is tightly and permanently associated with an enzyme.'"
+            },
+            {
+                question: "57. The maximum activity of an enzyme is typically found at its optimal:",
+                options: ["Substrate concentration", "Temperature", "pH", "All of the above"],
+                correct: 3,
+                reasoning: "The text discusses optimum temperature, pH, and substrate concentration, all of which affect enzyme activity."
+            },
+            {
+                question: "58. Increasing the temperature beyond the optimum for an enzyme-catalyzed reaction will cause a sharp decrease in activity due to:",
+                options: ["Increased collision rate", "Lowering of activation energy", "Denaturation of the enzyme", "Competitive inhibition"],
+                correct: 2,
+                reasoning: "The text states that above the optimum temperature, 'thermal agitation causes the enzyme to lose its specific shape (denaturation), thereby destroying the active site.'"
+            },
+            {
+                question: "59. The pH at which an enzyme shows its highest catalytic activity is known as its:",
+                options: ["Isoelectric point", "Optimal pH", "Neutral pH", "Saturation point"],
+                correct: 1,
+                reasoning: "The text defines optimal pH as the 'pH at which an enzyme performs maximum activity.'"
+            },
+            {
+                question: "60. A competitive inhibitor reduces an enzyme's activity by:",
+                options: ["Binding to the allosteric site", "Changing the enzyme's three-dimensional shape", "Binding to the active site, blocking the substrate", "Permanently altering the enzyme's structure"],
+                correct: 2,
+                reasoning: "The text states a competitive inhibitor 'is a substance that resembles the substrate and binds to the active site to stop the reaction.'"
+            },
+            {
+                question: "61. The inhibition caused by heavy metal ions like lead or mercury is typically:",
+                options: ["Competitive", "Non-competitive", "Reversible", "Allosteric"],
+                correct: 1,
+                reasoning: "The text says heavy metals 'inhibit enzymes non-competitively by combining with sulfhydryl groups... and breaking the disulphide bridges.'"
+            },
+            {
+                question: "62. An irreversible inhibitor permanently inactivates an enzyme by:",
+                options: ["Binding to the active site via a weak bond", "Forming a covalent bond with the enzyme", "Increasing the reaction temperature", "Lowering the substrate concentration"],
+                correct: 1,
+                reasoning: "The text describes an irreversible inhibitor as one that 'permanently inactivates the enzyme by forming a stable covalent bond.'"
+            },
+            {
+                question: "63. The phenomenon where the end product of a metabolic pathway inhibits the first enzyme of that pathway is called:",
+                options: ["Allosteric activation", "Feedback inhibition", "Competitive inhibition", "Irreversible inhibition"],
+                correct: 1,
+                reasoning: "The text defines feedback inhibition as when 'the activity of an enzyme is inhibited by its own product.'"
+            },
+            {
+                question: "64. The specificity of an enzyme is determined by the specific shape and chemical nature of its:",
+                options: ["Substrate", "Cofactor", "Active site", "Product"],
+                correct: 2,
+                reasoning: "The text states 'the specific shape and nature of the active site determine the substrate specificity.'"
+            },
+            {
+                question: "65. The presence of a **non-competitive** inhibitor most affects which kinetic parameter of an enzyme?",
+                options: ["Vmax", "Km", "Both Vmax and Km", "Neither Vmax nor Km"],
+                correct: 0,
+                reasoning: "A non-competitive inhibitor reduces the enzyme's efficiency, thereby lowering the maximum reaction rate (Vmax), but it doesn't affect the substrate's ability to bind, so Km remains unchanged."
+            },
+            {
+                question: "66. A substance that binds to an enzyme's active site and is not converted to a product is a:",
+                options: ["Substrate", "Competitive inhibitor", "Cofactor", "Product"],
+                correct: 1,
+                reasoning: "This describes a competitive inhibitor, which competes with the substrate for the active site without reacting."
+            },
+            {
+                question: "67. The model that proposes a flexible active site that changes shape upon substrate binding is:",
+                options: ["Lock and Key", "Induced Fit", "Active Site", "Allosteric"],
+                correct: 1,
+                reasoning: "This is the core principle of the Induced Fit model proposed by Daniel Koshland."
+            },
+            {
+                question: "68. Which of the following is NOT an environmental factor affecting enzyme activity?",
+                options: ["pH", "Temperature", "Substrate concentration", "Amino acid sequence"],
+                correct: 3,
+                reasoning: "Amino acid sequence determines the enzyme's structure, which dictates its activity, but it's an intrinsic property, not an environmental factor."
+            },
+            {
+                question: "69. An enzyme's activity typically doubles with every 10°C rise in temperature, up to the optimum. This is described by the:",
+                options: ["pH scale", "Q10 value", "Activation energy", "Substrate curve"],
+                correct: 1,
+                reasoning: "The Q10 value quantifies the effect of a 10°C temperature increase on a reaction rate. The text implies a Q10 value of around 2 for most enzyme reactions within their functional range."
+            },
+            {
+                question: "70. The presence of a **competitive** inhibitor can be overcome by:",
+                options: ["Increasing the temperature", "Lowering the pH", "Increasing the substrate concentration", "Adding a non-competitive inhibitor"],
+                correct: 2,
+                reasoning: "Since the inhibitor and substrate compete for the same site, increasing the substrate concentration increases the probability of the substrate binding, thereby overcoming the inhibition."
+            },
+            {
+                question: "71. The substance acted upon by an enzyme is the:",
+                options: ["Cofactor", "Inhibitor", "Product", "Substrate"],
+                correct: 3,
+                reasoning: "The text defines the substrate as 'a substance on which the enzyme acts.'"
+            },
+            {
+                question: "72. A non-protein part that is essential for the catalytic activity of an enzyme is called a:",
+                options: ["Substrate", "Holoenzyme", "Cofactor", "Inhibitor"],
+                correct: 2,
+                reasoning: "The text defines a cofactor as 'a non-protein group... essential for the catalytic activity of an enzyme.'"
+            },
+            {
+                question: "73. The name 'pepsinogen' and 'trypsinogen' indicate that these enzymes are:",
+                options: ["Inactive precursors", "Found in the pancreas", "Only active at low pH", "Lipid-digesting enzymes"],
+                correct: 0,
+                reasoning: "The suffix '-ogen' indicates a zymogen or inactive precursor form of an enzyme."
+            },
+            {
+                question: "74. The activation energy of a reaction can be lowered by:",
+                options: ["Adding a product", "Increasing the pressure", "Adding a catalyst", "Lowering the temperature"],
+                correct: 2,
+                reasoning: "A fundamental property of catalysts, including enzymes, is that they 'lower the need of activation energy.'"
+            },
+            {
+                question: "75. The specific sequence of amino acids in an enzyme constitutes its:",
+                options: ["Primary structure", "Secondary structure", "Tertiary structure", "Quaternary structure"],
+                correct: 0,
+                reasoning: "The text implicitly refers to the amino acid sequence as the primary structure that 'determines the three-dimensional configuration' of the enzyme."
+            },
+            {
+                question: "76. An enzyme's activity is plotted against its substrate concentration. The point at which the rate of reaction no longer increases is called:",
+                options: ["Km", "Vmax", "Optimal point", "Saturation point"],
+                correct: 3,
+                reasoning: "The text's graph and discussion on substrate concentration show that at a high concentration, the reaction rate plateaus, reaching 'a maximum or saturated point.'"
+            },
+            {
+                question: "77. The 'Induced Fit' model is a modification of the 'Lock and Key' model because it accounts for the:",
+                options: ["Effect of pH on enzyme activity", "Flexibility of the active site", "Role of cofactors", "Effect of temperature on enzyme activity"],
+                correct: 1,
+                reasoning: "The Induced Fit model's central tenet is that the 'active site is flexible; therefore, it is modified as the substrate interacts with enzyme.'"
+            },
+            {
+                question: "78. Heavy metal ions such as lead or mercury are potent enzyme inhibitors because they:",
+                options: ["Compete directly with the substrate", "Form stable bonds that denature the enzyme", "Increase the activation energy of the reaction", "Bind to the cofactor of the enzyme"],
+                correct: 1,
+                reasoning: "The text states they 'inhibit enzymes non-competitively... and breaking the disulphide bridges,' which permanently damages the enzyme's structure."
+            },
+            {
+                question: "79. The term 'allosteric' refers to a site on an enzyme that is:",
+                options: ["Identical to the active site", "The primary binding site for the substrate", "A site different from the active site for regulation", "Where the enzyme is synthesized"],
+                correct: 2,
+                reasoning: "The text's description of feedback inhibition states that the product 'binds to a different site called allosteric site,' showing it's a separate regulatory site."
+            },
+            {
+                question: "80. In an enzyme reaction, increasing the substrate concentration will increase the reaction rate up to a certain point. This is because:",
+                options: ["The enzyme becomes denatured", "The active sites of all enzyme molecules become saturated", "The pH of the solution changes", "The temperature of the solution decreases"],
+                correct: 1,
+                reasoning: "As substrate concentration increases, more active sites are occupied. At the saturation point, 'all the active sites of enzyme molecules are completely occupied by substrate molecules' and the rate can no longer increase."
+            },
+            // Advanced Conceptual MCQs (81-100)
+            {
+                question: "81. A researcher isolates a mutant cell line where proteins synthesized on the RER are not being transported to the Golgi apparatus. The most likely defect is in the:",
+                options: ["Ribosomes of the RER", "Nuclear pore complexes", "Function of the Smooth ER", "Mitochondrial ATP production"],
+                correct: 2,
+                reasoning: "The text explicitly states that 'proteins from rough ER are also transported to the Golgi complex through smooth ER.' A failure in this transport implicates the role of SER as a transport channel, not the synthesis function of the RER itself."
+            },
+            {
+                question: "82. If the nucleolus of a cell is experimentally disrupted, the immediate cellular process that would be most adversely affected is:",
+                options: ["DNA replication", "Transcription of mRNA", "Assembly of ribosomal subunits", "Active transport across the membrane"],
+                correct: 2,
+                reasoning: "The nucleolus is specifically responsible for the construction of ribosomes, containing the granular area (ribosomal subunits) and fibrillar area (rRNA and rDNA). Disrupting it would halt ribosome assembly, directly impacting protein synthesis capacity."
+            },
+            {
+                question: "83. Consider a metabolic pathway: A ->(E1)-> B ->(E2)-> C ->(E3)-> D. If an excess of product D inhibits enzyme E1, this is an example of:",
+                options: ["Competitive inhibition", "Feedback inhibition", "Allosteric activation", "Denaturation"],
+                correct: 1,
+                reasoning: "The text defines feedback inhibition as when 'the activity of an enzyme is inhibited by its own product.' Here, the end product D is inhibiting the first enzyme (E1) in its own pathway, which is a classic example of this regulatory mechanism."
+            },
+            {
+                question: "84. The secondary constriction (nucleolar organizer) of a chromosome is functionally most analogous to:",
+                options: ["A centromere, as both are involved in chromosome movement.", "A gene locus, as both hold genetic information.", "The forming face of the Golgi, as both are sites of assembly.", "A nuclear pore, as both allow for exchange of materials."],
+                correct: 2,
+                reasoning: "The nucleolar organizer 'gives rise to nucleoli,' meaning it is a site where a specific structure (the nucleolus) is assembled. Similarly, the forming face of the Golgi is where new cisternae are assembled from vesicles. Both are organizational centers for building complex structures."
+            },
+            {
+                question: "85. In an experiment, an enzyme's reaction rate is measured at different pH levels. The rate is high at pH 2, drops significantly at pH 7, and rises again at pH 9. The most logical conclusion is that this enzyme:",
+                options: ["Is denatured and permanently inactivated at neutral pH.", "Has two different active sites for different substrates.", "Functions optimally in two different ionic environments.", "Requires a cofactor that is only active at extreme pH."],
+                correct: 2,
+                reasoning: "The text mentions that 'some enzymes like papain from green papaya act both in acidic and alkaline media.' This biphasic activity profile suggests the enzyme's active site can function effectively under two distinct pH conditions, unlike most enzymes which have a single optimum pH."
+            },
+            {
+                question: "86. A non-competitive inhibitor binds to an enzyme's allosteric site. This inhibition would NOT be overcome by:",
+                options: ["Diluting the reaction mixture", "Adding more substrate", "Removing the inhibitor", "Adding more enzyme"],
+                correct: 1,
+                reasoning: "Since a non-competitive inhibitor binds to a site *other than* the active site, increasing substrate concentration does not compete for the same binding location. The inhibitor's effect is independent of substrate concentration, as per its definition in the text."
+            },
+            {
+                question: "87. The presence of 70S ribosomes and a small circular DNA in the mitochondrial matrix is the strongest evidence supporting the hypothesis that mitochondria:",
+                options: ["Are the powerhouse of the cell.", "Evolved from endosymbiotic prokaryotic organisms.", "Can undergo self-replication independent of the nucleus.", "Are involved in lipid synthesis."],
+                correct: 1,
+                reasoning: "Prokaryotic cells have 70S ribosomes and often circular DNA. The presence of these prokaryotic features within a eukaryotic organelle is a key piece of evidence for the endosymbiotic theory, which proposes that mitochondria originated from bacteria engulfed by a larger cell."
+            },
+            {
+                question: "88. During binary fission in bacteria, the partitioning of the single circular chromosome is most critically dependent on:",
+                options: ["The formation of a mitotic spindle", "Its attachment to the mesosome", "The process of conjugation", "The presence of histones"],
+                correct: 1,
+                reasoning: "While not explicitly detailed in the text, prokaryotes lack a mitotic spindle and histones. A key concept is that the bacterial chromosome is attached to the plasma membrane. As the cell grows and the membrane invaginates (a process hinted at with the mesosome in some models), the chromosomes are pulled apart, enabling their segregation during binary fission."
+            },
+            {
+                question: "89. If the nuclear pores of a differentiated cell (e.g., an erythrocyte precursor) are blocked, the process most immediately affected would be:",
+                options: ["ATP production in the cytoplasm", "Translation of mRNA into protein", "The movement of mRNA from the nucleus to the cytoplasm", "The replication of mitochondrial DNA"],
+                correct: 2,
+                reasoning: "The text states nuclear pores regulate 'nucleo-cytoplasmic exchange,' which includes 'RNA... moving from nucleus to the cytoplasm.' mRNA is synthesized in the nucleus but functions in the cytoplasm on ribosomes. Blocking pores would trap mRNA in the nucleus, halting protein synthesis."
+            },
+            {
+                question: "90. The primary constriction of a chromosome and the F0-F1 particles of mitochondria are similar in that both:",
+                options: ["Are composed primarily of nucleic acids.", "Serve as specific attachment sites for other structures.", "Are involved in the synthesis of ATP.", "Are only visible during cell division."],
+                correct: 1,
+                reasoning: "The centromere (at the primary constriction) is the attachment site for spindle microtubules via the kinetochore. The F0 base of the F0-F1 particle is embedded in the mitochondrial membrane and serves as the attachment site for the F1 component (the ATP synthase enzyme). Both are specialized attachment points."
+            },
+            {
+                question: "91. In the induced fit model, the flexibility of the active site is crucial because it:",
+                options: ["Allows the enzyme to be used for a wider variety of unrelated reactions.", "Helps in stretching the substrate bonds, facilitating the reaction.", "Prevents the enzyme from being denatured by heat.", "Ensures the enzyme is absolutely specific for only one substrate."],
+                correct: 1,
+                reasoning: "The text explains that the induced fit allows the enzyme to 'mold[] the substrate into a precise shape,' and gives an example: 'if a substrate is to be split, a bond might be stretched by the enzyme, making it more likely to break.' This mechanical stress lowers the activation energy."
+            },
+            {
+                question: "92. A cell is treated with a drug that specifically disrupts disulfide bridges. The enzyme class most likely to be denatured by this drug is:",
+                options: ["Enzymes with prosthetic groups", "Enzymes with coenzymes", "Enzymes that are ribozymes", "Enzymes whose tertiary structure is stabilized by -S-S- bonds"],
+                correct: 3,
+                reasoning: "The text states that heavy metals denature enzymes by 'breaking the disulphide bridges' and emphasizes that 'these bridges are important in maintaining tertiary structure.' A drug targeting these bonds would directly disrupt the 3D structure of enzymes reliant on them."
+            },
+            {
+                question: "93. The fact that enzymes lower the activation energy but do not change the equilibrium of a reaction implies that enzymes:",
+                options: ["Make endergonic reactions exergonic.", "Speed up both the forward and reverse reactions equally.", "Are consumed in the reaction to provide energy.", "Only work on reactions with a negative free energy change (ΔG < 0)."],
+                correct: 1,
+                reasoning: "Equilibrium is determined by the difference in free energy (ΔG) between products and reactants. By lowering the activation energy barrier, an enzyme speeds up the rate at which equilibrium is reached but does not alter the final equilibrium concentrations. This means it must catalyze the reverse reaction at the same increased rate once the product concentration is high enough."
+            },
+            {
+                question: "94. In a transduction experiment, a virus carries a gene for antibiotic resistance from one bacterium to another. This is an example of:",
+                options: ["Vertical gene transfer", "Horizontal gene transfer", "Binary fission", "Conjugation"],
+                correct: 1,
+                reasoning: "Transduction, as described in the text, involves a virus (a vector) moving DNA between two contemporary, existing bacteria. This is horizontal gene transfer (between peers), as opposed to vertical gene transfer (from parent to offspring during cell division)."
+            },
+            {
+                question: "95. The Q10 value for an enzyme-catalyzed reaction is measured to be 1.2. This relatively low value suggests that the reaction rate is:",
+                options: ["Highly sensitive to temperature changes.", "Relatively insensitive to temperature changes.", "At its optimum temperature.", "Being affected by a competitive inhibitor."],
+                correct: 1,
+                reasoning: "Q10 quantifies the fold increase in rate per 10°C rise. A Q10 of 2-3 is typical for enzyme reactions. A Q10 of 1.2 indicates the rate increases only 1.2-fold (20%) for a 10°C rise, meaning it has a very low thermal sensitivity compared to most biological reactions."
+            },
+            {
+                question: "96. The role of porins in the outer mitochondrial membrane is most similar to the role of:",
+                options: ["Nucleoporins in the nuclear envelope", "The Na+/K+ pump in the plasma membrane", "The enzymes in the mitochondrial matrix", "The cristae in the inner mitochondrial membrane"],
+                correct: 0,
+                reasoning: "The text states porins 'allow free passage of various molecule into the inter-membrane space,' making the outer membrane sieve-like. Nucleoporins facilitate the controlled passage of molecules through nuclear pores. Both are specialized transport proteins that govern permeability across a membrane boundary."
+            },
+            {
+                question: "97. A zymogen, like pepsinogen, is a biological strategy to:",
+                options: ["Increase the catalytic efficiency of an enzyme.", "Prevent an enzyme from digesting the tissues that synthesize it.", "Allow an enzyme to have a broader pH range.", "Enable an enzyme to use a wider variety of substrates."],
+                correct: 1,
+                reasoning: "Pepsin is a powerful protease. secreting it as an inactive precursor (pepsinogen) with a blocking polypeptide prevents it from digesting the proteins of the chief cells that make it and the stomach wall. It is only activated (to pepsin) when it reaches the safety of the stomach lumen with its low pH."
+            },
+            {
+                question: "98. In feedback inhibition, the end product binding to the allosteric site of the first enzyme causes:",
+                options: ["A conformational change that denatures the enzyme.", "A conformational change that improves the fit for the substrate.", "A conformational change that disrupts the shape of the active site.", "The enzyme to be marked for degradation."],
+                correct: 2,
+                reasoning: "The allosteric site is 'a different site' from the active site. When the inhibitor binds there, it causes a 'change in the active site's shape' to inhibit its function, without denaturing the entire enzyme."
+            },
+            {
+                question: "99. A cell is deficient in the protein component of its ribosomes. This would most directly inhibit the function of which organelle?",
+                options: ["Rough Endoplasmic Reticulum", "Smooth Endoplasmic Reticulum", "Golgi apparatus", "Mitochondria"],
+                correct: 0,
+                reasoning: "Ribosomes (which have a protein component) are essential for the RER's function of synthesizing proteins, as the text states the RER is 'studded with ribosomes.'"
+            },
+            {
+                question: "100. A patient has a genetic disorder where their cells cannot synthesize the enzyme that activates the zymogen trypsinogen. The patient would have difficulty digesting:",
+                options: ["Fats", "Carbohydrates", "Proteins", "Nucleic acids"],
+                correct: 2,
+                reasoning: "Trypsinogen is a protease zymogen. Its activation to trypsin is a critical step that subsequently activates other pancreatic proteases. Without it, the digestion of proteins would be severely compromised."
+            }
+        ];
+
+        // DOM Elements
+        const passwordSection = document.getElementById('password-section');
+        const quizSection = document.getElementById('quiz-section');
+        const resultSection = document.getElementById('result-section');
+        const passwordInput = document.getElementById('password-input');
+        const startBtn = document.getElementById('start-btn');
+        const questionEl = document.getElementById('question');
+        const optionsEl = document.getElementById('options');
+        const backBtn = document.getElementById('back-btn');
+        const skipBtn = document.getElementById('skip-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const submitBtn = document.getElementById('submit-btn');
+        const progressBar = document.getElementById('progress-bar');
+        const progressPercent = document.getElementById('progress-percent');
+        const currentQuestionEl = document.getElementById('current-question');
+        const totalQuestionsEl = document.getElementById('total-questions');
+        const skippedCountEl = document.getElementById('skipped-count');
+        const totalTimerEl = document.getElementById('total-time');
+        const questionTimerEl = document.getElementById('question-time');
+        const totalTimerDisplay = document.getElementById('total-timer');
+        const questionTimerDisplay = document.getElementById('question-timer');
+        const timeProgressFillEl = document.getElementById('time-progress-fill');
+        const resultMcqsEl = document.getElementById('total-mcqs');
+        const resultCorrectEl = document.getElementById('correct-answers');
+        const resultWrongEl = document.getElementById('wrong-answers');
+        const resultSkippedEl = document.getElementById('skipped-answers');
+        const resultLeftEl = document.getElementById('left-answers');
+        const resultPercentageEl = document.getElementById('percentage');
+        const resultTimeTakenEl = document.getElementById('time-taken');
+        const resultDetailsEl = document.getElementById('result-details');
+        const retakeBtn = document.getElementById('retake-btn');
+        const messageModal = document.getElementById('message-modal');
+        const modalTitleEl = document.getElementById('modal-title');
+        const modalMessageEl = document.getElementById('modal-message');
+
+        // Quiz State Variables
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+        let totalTimeLimit = 1200; // 20 minutes in seconds
+        let questionTimeLimit = 60; // 1 minute in seconds
+        let totalTimeElapsed = 0;
+        let totalTimerInterval;
+        let questionTimerInterval;
+        const passwordKey = 'BXM736/?,AXK';
+
+        // --- Utility Functions ---
+
+        // Function to show a custom message box instead of alert()
+        function showMessage(title, message) {
+            modalTitleEl.textContent = title;
+            modalMessageEl.textContent = message;
+            messageModal.style.display = 'flex';
+        }
+        
+        // Function to format seconds into MM:SS format
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+        }
+
+        // --- Core Quiz Logic ---
+
+        // Function to start the total timer
+        function startTotalTimer() {
+            totalTimeElapsed = 0;
+            totalTimerInterval = setInterval(() => {
+                totalTimeElapsed++;
+                const remainingTime = totalTimeLimit - totalTimeElapsed;
+                if (remainingTime < 0) {
+                    endQuiz();
+                } else {
+                    totalTimerEl.textContent = formatTime(remainingTime);
+                }
+            }, 1000);
+        }
+
+        // Function to start the question timer
+        function startQuestionTimer() {
+            let questionTimeLeft = questionTimeLimit;
+            questionTimerEl.textContent = formatTime(questionTimeLeft);
+            timeProgressFillEl.style.width = `100%`;
+            
+            questionTimerInterval = setInterval(() => {
+                questionTimeLeft--;
+                questionTimerEl.textContent = formatTime(questionTimeLeft);
+                const progress = (questionTimeLeft / questionTimeLimit) * 100;
+                timeProgressFillEl.style.width = `${progress}%`;
+
+                if (questionTimeLeft <= 0) {
+                    clearInterval(questionTimerInterval);
+                    handleNextQuestion();
+                }
+            }, 1000);
+        }
+
+        // Function to load a question and its options
+        function loadQuestion() {
+            if (currentQuestionIndex < 0 || currentQuestionIndex >= quizData.length) {
+                endQuiz();
+                return;
+            }
+
+            clearInterval(questionTimerInterval);
+            startQuestionTimer();
+
+            const questionObj = quizData[currentQuestionIndex];
+            questionEl.textContent = questionObj.question;
+            optionsEl.innerHTML = '';
+
+            const optionLabels = ["a)", "b)", "c)", "d)"];
+            questionObj.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.classList.add('option-row');
+                optionDiv.innerHTML = `
+                    <span class="option-label">${optionLabels[index]}</span>
+                    <span class="option-text">${option}</span>
+                `;
+                optionDiv.dataset.index = index;
+                if (userAnswers[currentQuestionIndex] === index) {
+                    optionDiv.classList.add('selected');
+                }
+                optionsEl.appendChild(optionDiv);
+            });
+            
+            // Update progress and info
+            const progress = ((currentQuestionIndex + 1) / quizData.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            progressPercent.textContent = `${Math.round(progress)}%`;
+            currentQuestionEl.textContent = currentQuestionIndex + 1;
+            totalQuestionsEl.textContent = quizData.length;
+            skippedCountEl.textContent = userAnswers.filter(ans => ans === null).length;
+
+            // Handle button visibility
+            backBtn.style.display = currentQuestionIndex > 0 ? 'flex' : 'none';
+            nextBtn.style.display = currentQuestionIndex < quizData.length - 1 ? 'flex' : 'none';
+            skipBtn.style.display = userAnswers[currentQuestionIndex] === null ? 'flex' : 'none';
+            submitBtn.style.display = currentQuestionIndex === quizData.length - 1 ? 'flex' : 'none';
+        }
+
+        // Function to handle the next question logic
+        function handleNextQuestion() {
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else {
+                endQuiz();
+            }
+        }
+        
+        // Function to calculate and display results
+        function endQuiz() {
+            clearInterval(totalTimerInterval);
+            clearInterval(questionTimerInterval);
+            
+            quizSection.style.display = 'none';
+            totalTimerDisplay.style.display = 'none';
+            questionTimerDisplay.style.display = 'none';
+            resultSection.style.display = 'block';
+
+            let correctCount = 0;
+            let wrongCount = 0;
+            let skippedCount = 0;
+            let leftCount = 0;
+            
+            resultDetailsEl.innerHTML = '';
+            
+            userAnswers.forEach((userAnswer, index) => {
+                const quizItem = quizData[index];
+                const isCorrect = userAnswer === quizItem.correct;
+                const isSkipped = userAnswer === null;
+
+                const resultItem = document.createElement('div');
+                resultItem.classList.add('result-item');
+                
+                let resultText = '';
+                if (isSkipped) {
+                    skippedCount++;
+                    resultText = `<span class="incorrect">Skipped</span>`;
+                } else if (isCorrect) {
+                    correctCount++;
+                    resultText = `<span class="correct">Correct</span>`;
+                } else {
+                    wrongCount++;
+                    resultText = `<span class="incorrect">Wrong</span>`;
+                }
+
+                resultItem.innerHTML = `
+                    <div class="result-question">
+                        ${quizItem.question}
+                        ${resultText}
+                    </div>
+                    <div class="result-answer">
+                        ${isSkipped ? '' : `Your Answer: ${quizItem.options[userAnswer]}`}
+                    </div>
+                    <div class="result-answer correct">
+                        Correct Answer: ${quizItem.options[quizItem.correct]}
+                    </div>
+                    <div class="reasoning">
+                        <strong>Reasoning:</strong> ${quizItem.reasoning}
+                    </div>
+                `;
+                resultDetailsEl.appendChild(resultItem);
+            });
+            leftCount = userAnswers.filter(ans => ans === null).length;
+            
+            const total = quizData.length;
+            const percentage = (correctCount / total) * 100 || 0;
+            
+            resultMcqsEl.textContent = total;
+            resultCorrectEl.textContent = correctCount;
+            resultWrongEl.textContent = wrongCount;
+            resultSkippedEl.textContent = skippedCount;
+            resultLeftEl.textContent = leftCount;
+            resultPercentageEl.textContent = `${percentage.toFixed(0)}%`;
+            resultTimeTakenEl.textContent = formatTime(totalTimeElapsed);
+        }
+        
+        // --- Event Listeners ---
+
+        // Start button logic
+        startBtn.addEventListener('click', () => {
+            const password = passwordInput.value.trim();
+            if (password === passwordKey) {
+                passwordSection.style.display = 'none';
+                quizSection.style.display = 'block';
+                totalTimerDisplay.style.display = 'inline-flex';
+                questionTimerDisplay.style.display = 'inline-flex';
+                startTotalTimer();
+                loadQuestion();
+            } else {
+                showMessage("Invalid Password", "Please enter the correct password to begin the quiz.");
+                passwordInput.value = ''; // Clear password field on wrong attempt
+            }
+        });
+
+        // Option selection logic
+        optionsEl.addEventListener('click', (e) => {
+            const optionRow = e.target.closest('.option-row');
+            if (optionRow) {
+                // Clear previous selection
+                optionsEl.querySelectorAll('.option-row').forEach(row => {
+                    row.classList.remove('selected');
+                });
+                // Add new selection
+                optionRow.classList.add('selected');
+                userAnswers[currentQuestionIndex] = parseInt(optionRow.dataset.index);
+            }
+        });
+
+        // Navigation buttons
+        backBtn.addEventListener('click', () => {
+            currentQuestionIndex--;
+            loadQuestion();
+        });
+
+        skipBtn.addEventListener('click', () => {
+            userAnswers[currentQuestionIndex] = null; // Mark as skipped
+            handleNextQuestion();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            handleNextQuestion();
+        });
+
+        submitBtn.addEventListener('click', endQuiz);
+
+        // Retake button logic
+        retakeBtn.addEventListener('click', () => {
+            currentQuestionIndex = 0;
+            userAnswers.fill(null);
+            totalTimeElapsed = 0;
+            resultSection.style.display = 'none';
+            passwordSection.style.display = 'block';
+            passwordInput.value = '';
+            totalTimerEl.textContent = formatTime(totalTimeLimit);
+            questionTimerEl.textContent = formatTime(questionTimeLimit);
+            skippedCountEl.textContent = 0;
+        });
+    </script>
+</body>
+</html>
